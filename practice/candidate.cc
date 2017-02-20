@@ -21,13 +21,13 @@ void FindCandidates(const Problem &problem,
             min(problem.num_rows_ - row, problem.max_num_cells_ / width);
 
         int num_tomatoes = 0;
-        int num_cells = 0;
+        int num_mushrooms = 0;
 
         for (int height = 1; height <= max_height; ++height) {
           const auto &psums = tomatoes_psums[row + height - 1];
-          num_tomatoes += psums[col + width] - psums[col];
-          num_cells += width;
-          const int num_mushrooms = num_cells - num_tomatoes;
+          const int cur_tomatoes = psums[col + width] - psums[col];
+          num_tomatoes += cur_tomatoes;
+          num_mushrooms += width - cur_tomatoes;
 
           if (num_tomatoes >= problem.min_num_ingridients_ &&
               num_mushrooms >= problem.min_num_ingridients_) {
