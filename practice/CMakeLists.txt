@@ -8,8 +8,10 @@ add_compile_options(
   )
 
 add_library(common
-  problem.h
+  candidate.cc
+  candidate.h
   problem.cc
+  problem.h
   )
 
 add_executable(solver solver.cc)
