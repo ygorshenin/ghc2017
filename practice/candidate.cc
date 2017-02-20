@@ -5,6 +5,16 @@
 #include <algorithm>
 using namespace std;
 
+ostream &operator<<(ostream &os, const Candidate &candidate) {
+  const int r1 = candidate.row_;
+  const int c1 = candidate.col_;
+  const int r2 = r1 + candidate.height_ - 1;
+  const int c2 = c1 + candidate.width_ - 1;
+
+  os << r1 << " " << c1 << " " << r2 << " " << c2;
+  return os;
+}
+
 void FindCandidates(const Problem &problem,
                     std::vector<Candidate> &candidates) {
   Fenwick2D fenwick(problem.num_rows_, problem.num_cols_);
