@@ -1,3 +1,8 @@
 # Ignore Emacs backup files
 *~
+
+# Ignore cmake build directory
 build
+
+# Ignore tests
+*.out
