@@ -14,6 +14,6 @@ add_library(common
   problem.h
   )
 
-add_executable(solver solver.cc)
+add_executable(greedy-solver greedy-solver.cc)
 
-target_link_libraries(solver common)
+target_link_libraries(greedy-solver common)
