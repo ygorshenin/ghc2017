@@ -16,5 +16,9 @@ add_library(common
   )
 
 add_executable(greedy-solver greedy-solver.cc)
+add_custom_target(src.zip ALL COMMAND
+  ${CMAKE_COMMAND} -E tar "cfv" "src.zip" --format=zip
+  ${CMAKE_CURRENT_SOURCE_DIR}/*.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
 target_link_libraries(greedy-solver common)
