@@ -10,6 +10,7 @@ add_compile_options(
 add_library(common
   candidate.cc
   candidate.h
+  fenwick.h
   problem.cc
   problem.h
   )
