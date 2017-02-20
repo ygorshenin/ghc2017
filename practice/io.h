@@ -8,7 +8,7 @@
 struct Problem {
   std::istream &Read(std::istream &is);
 
-  std::vector<std::string> m_pizza;
+  std::vector<std::string> pizza_;
   int num_rows_ = 0;
   int num_cols_ = 0;
   int min_num_ingridients_ = 0;
