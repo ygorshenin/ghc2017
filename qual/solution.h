@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <iostream>
@@ -10,6 +11,8 @@ struct Description {
 
 struct Solution {
   std::vector<Description> m_descriptions;
+
+  Solution(const std::vector<std::vector<int>> &videos);
 };
 
 std::ostream &operator<<(std::ostream &os, Description const &d);
