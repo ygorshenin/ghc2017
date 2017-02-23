@@ -15,6 +15,7 @@ add_library(common
   )
 
 add_executable(solver solver.cc)
+add_executable(solver-y solver-y.cc)
 add_custom_target(src.zip ALL COMMAND
   ${CMAKE_COMMAND} -E tar "cfv" "src.zip" --format=zip
   ${CMAKE_CURRENT_SOURCE_DIR}/*.cc
@@ -22,3 +23,4 @@ add_custom_target(src.zip ALL COMMAND
   )
 
 target_link_libraries(solver common)
+target_link_libraries(solver-y common)
