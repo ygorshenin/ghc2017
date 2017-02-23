@@ -12,6 +12,7 @@ struct Description {
 struct Solution {
   std::vector<Description> m_descriptions;
 
+  Solution() = default;
   Solution(const std::vector<std::vector<int>> &videos);
 };
 

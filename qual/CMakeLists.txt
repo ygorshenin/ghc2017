@@ -25,3 +25,7 @@ add_custom_target(src.zip ALL COMMAND
   ${CMAKE_CURRENT_SOURCE_DIR}/*.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/*.h
   )
+
+target_link_libraries(solver common)
+target_link_libraries(solver_m common)
+target_link_libraries(solver-y common)
