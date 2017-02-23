@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR="$(dirname "$0")"
-SOLVER="${SOLVER:-$WORKING_DIR/build/greedy-solver}"
+SOLVER="${SOLVER:-$WORKING_DIR/build/solver}"
 TESTS="$WORKING_DIR/tests"
 
 if [ ! -f "$SOLVER" ]
