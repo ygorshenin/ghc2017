@@ -28,3 +28,13 @@ Solution::Solution(const std::vector<std::vector<int>> &videos) {
     m_descriptions[i].m_videos = videos[i];
   }
 }
+
+Solution::Solution(const std::vector<std::set<int>> &videos) {
+  m_descriptions.resize(videos.size());
+  for (size_t i = 0; i < videos.size(); ++i) {
+    m_descriptions[i].m_cache = i;
+    for (auto const &v : videos[i]) {
+      m_descriptions[i].m_videos.push_back(v);
+    }
+  }
+}

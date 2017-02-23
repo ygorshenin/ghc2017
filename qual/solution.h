@@ -2,6 +2,7 @@
 #pragma once
 
 #include <iostream>
+#include <set>
 #include <vector>
 
 struct Description {
@@ -14,6 +15,7 @@ struct Solution {
 
   Solution() = default;
   Solution(const std::vector<std::vector<int>> &videos);
+  Solution(const std::vector<std::set<int>> &videos);
 };
 
 std::ostream &operator<<(std::ostream &os, Description const &d);

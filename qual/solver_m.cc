@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <ctime>
 #include <iostream>
 #include <random>
+#include <utility>
 #include <vector>
 using namespace std;
 
@@ -17,62 +19,64 @@ int main() {
   const int numVids = problem.m_videos.size();
   const int numCaches = problem.m_numCaches;
   const int capacity = problem.m_capacity;
+  auto &vidSz = problem.m_videos;
 
-  vector<vector<long long>> popularity(numCaches, vector<long long>(numVids));
-  for (const auto &r : problem.m_requests) {
-    const auto &e = problem.m_endpoints[r.m_endpoint];
-    const int Ld = e.m_serverLatency;
-    for (const auto &link : e.m_links) {
-      const int L = link.m_latency;
-      // todo: may overlap
-      const auto h = (Ld - L) * static_cast<long long>(r.m_weight);
-      popularity[link.m_cache][r.m_video] += h;
+  vector<set<int>> videos(numCaches);
+  vector<int> cap(numCaches, capacity);
+  double startTime = clock();
+  vector<tuple<int, int, int>> cand;
+  long long bestSc = 0;
+  while (clock() - startTime < 2.0 * CLOCKS_PER_SEC) {
+    cand.clear();
+    for (size_t i = 0; i < numCaches; ++i) {
+      auto &v = videos[i];
+      for (size_t j = 0; j < numVids; ++j) {
+        if (v.count(j) > 0)
+          continue;
+        if (cap[i] - vidSz[j] >= 0) {
+          cand.emplace_back(i, -1, j);
+          continue;
+	}
+        for (int evicted : v) {
+          if (cap[i] + vidSz[evicted] - vidSz[j] >= 0) {
+            cand.emplace_back(i, evicted, j);
+          }
+        }
+      }
     }
-  }
 
-  vector<vector<int>> videos(numCaches);
-  for (size_t i = 0; i < numCaches; ++i) {
-    vector<vector<long long>> d(numVids + 1, vector<long long>(capacity + 1, -1));
-    vector<vector<int>> prev(numVids + 1, vector<int>(capacity + 1, -1));
-    d[0][0] = 0;
-    for (int vid = 1; vid <= numVids; ++vid) {
-      for (int prevVid = 0; prevVid < vid; ++prevVid) {
-	for (int cap = 0; cap <= capacity; ++cap) {
-	long long cur = d[prevVid][cap];
-	if (cur < 0) {
-	  continue;
-	}
-	int ncap = cap + problem.m_videos[vid - 1];
-	if (ncap > capacity) {
-	  continue;
-	}
-	cur += popularity[i][vid - 1];
-	if (d[vid][ncap] < cur) {
-	  d[vid][ncap] = cur;
-	  prev[vid][ncap] = prevVid;
-	}
+    for (const auto &cc : cand) {
+      int i = get<0>(cc);
+      int u = get<1>(cc);
+      int v = get<2>(cc);
+      if (u < 0 && v < 0) {
+        continue;
       }
+      if (u >= 0 && v >= 0 && cap[i] + vidSz[u] - vidSz[v] < 0) {
+        continue;
       }
-    }
-    int bestVid = 0;
-    int bestCap = 0;
-    for (int vid = 0; vid <= numVids; ++vid) {
-      for (int cap = 0; cap <= capacity; ++cap) {
-	if (d[bestVid][bestCap] < d[vid][cap]) {
-	  bestVid = vid;
-	  bestCap = cap;
-	}
+      if (v >= 0 && cap[i] - vidSz[v] < 0) {
+        continue;
+      }
+      auto videosSav = videos;
+      auto capSav = cap;
+
+      videos[i].erase(u);
+      if (u >= 0) {
+        cap[i] += vidSz[u];
+      }
+      videos[i].insert(v);
+      cap[i] -= vidSz[v];
+
+      Solution sol(videos);
+      const auto sc = CalculateScore(problem, sol);
+      if (sc > bestSc) {
+        bestSc = sc;
+      } else {
+        videos = videosSav;
+        cap = capSav;
       }
     }
-    int v = bestVid;
-    int c = bestCap;
-    while (v > 0) {
-      int pv = prev[v][c];
-      videos[i].push_back(v - 1);
-      c -= problem.m_videos[v - 1];
-      v = pv;
-    }
-    sort(videos.begin(), videos.end());
   }
 
   Solution solution(videos);
