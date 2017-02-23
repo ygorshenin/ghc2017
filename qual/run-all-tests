@@ -1,0 +1,25 @@
+#!/bin/bash
+
+WORKING_DIR="$(dirname "$0")"
+SOLVER="${SOLVER:-$WORKING_DIR/build/greedy-solver}"
+TESTS="$WORKING_DIR/tests"
+
+if [ ! -f "$SOLVER" ]
+then
+    echo "Can't find solver $SOLVER" 1>&2
+    exit -1
+fi
+
+if [ ! -d "$TESTS" ]
+then
+    echo "Can't find tests directory $TESTS" 1>&2
+    exit -1
+fi
+
+for input in "$TESTS"/*.in
+do
+    output="${input%.in}.out"
+    echo "Processing ${input}..."
+    time ./"$SOLVER" <"$input" >"$output"
+    echo
+done
